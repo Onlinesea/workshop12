@@ -2,7 +2,6 @@ package workshop12.workshop12xh.controller;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
@@ -14,7 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import workshop12.workshop12xh.model.NumberObject;
 
@@ -32,7 +33,32 @@ public class NumController {
     }
 
     @PostMapping("/generate")
-    public String generateResult(@ModelAttribute NumberObject numObj, Model model){
+    public String submittedResult(@ModelAttribute NumberObject numObj, Model model){
+        String numString = Integer.toString(numObj.getNumber());
+
+        this.generateResult(numString, model);
+
+        return "form";
+    }
+
+    @GetMapping("/generate")
+    public String requestParamResult(@RequestParam String numString, Model model){
+
+        this.generateResult(numString, model);
+
+        return "form";
+        
+    }
+
+    @GetMapping("/generate/{numString}")
+    public String pathVariable(@PathVariable String numString, Model model){
+
+        this.generateResult(numString, model);
+
+        return "form";
+    }
+
+    private void generateResult(String numRequiredString, Model model){
         int maxNum = 31;
         String[] imgString = new String[maxNum];
 
@@ -42,7 +68,7 @@ public class NumController {
 
         Random random = new Random();
         Set<Integer> uniqueGenNum = new LinkedHashSet<Integer>();
-        int uniqueNumRequired = numObj.getNumber();
+        int uniqueNumRequired = Integer.parseInt(numRequiredString);
 
         logger.info("text from field > " + uniqueNumRequired);
         while(uniqueGenNum.size()< uniqueNumRequired){
@@ -56,10 +82,12 @@ public class NumController {
             int curr = it.next();
             generatedImgs.add(imgString[curr]);
         }
+
+        NumberObject numObj = new NumberObject();
+        numObj.setNumber(uniqueNumRequired);
         model.addAttribute("formObj", numObj);
         model.addAttribute("generatedImgs", generatedImgs.toArray());
         model.addAttribute("numberInput", uniqueNumRequired);
 
-        return "form";
     }
 }
