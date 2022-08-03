@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+</head>
+<body>
+    <h1>Your List Of <span th:text="${numberInput}"></span> Random Images</h1>
+    <ul th:each = "image:${generatedImgs}" >
+    <li th:text = "${image}"></li></li>
+    <img th:src = "@{${'/images/' + image}}" width="200" height="200">
+    </ul>
+</body>
+</html>

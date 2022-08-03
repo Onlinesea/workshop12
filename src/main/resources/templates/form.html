@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenerateForm</title>
+</head>
+<body>
+    <h1>Input the number that you wished to generate</h1>
+    <br>
+    <form 
+        action= "#"
+        th:action="@{/generate}"
+        th:object="${formObj}"
+        method="post"
+        >
+
+        <input type="text" th:field="*{number}">
+        <input type="submit" value="Generate">
+    </form>
+
+    <h1>Your List Of <span th:text="${numberInput}"></span> Random Images</h1>
+    <ul th:each = "image:${generatedImgs}" >
+    <li th:text = "${image}"></li></li>
+    <img th:src = "@{${'/images/' + image}}" width="200" height="200">
+    </ul>
+</body>
+</html>
